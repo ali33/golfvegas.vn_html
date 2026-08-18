@@ -3,7 +3,7 @@ Theme Name: Golf Vegas
 Theme URI: https://golfvegas.vn
 Author: Golf Vegas
 Description: Block theme (FSE) cho website Golf Vegas — Integrated Media Solutions. Thiết kế theo hướng trang nhã, hiện đại, sang trọng. Toàn bộ design token nằm trong theme.json.
-Version: 0.3.1
+Version: 0.4.2
 Requires at least: 6.5
 Tested up to: 6.7
 Requires PHP: 8.0
@@ -96,24 +96,119 @@ body {
 }
 
 /*
- * Eyebrow nằm trong section nền tối tự đổi sang tông sáng.
- * Làm theo ngữ cảnh thay vì gắn class thủ công ở từng pattern — chỉ cần quên
- * một chỗ là tương phản tụt xuống 3.48:1 và trượt WCAG, mà nhìn mắt thường
- * gần như không nhận ra.
+ * Viên ruby nét mảnh đứng đầu mỗi nhãn section.
+ *
+ * Dùng mask thay vì nhúng SVG có màu sẵn: hình dạng nằm trong mask, còn MÀU lấy
+ * từ token qua background-color. Nhờ vậy viên đá tự đổi màu theo nền (cam trên
+ * nền sáng, vàng trên nền tối) mà không vi phạm quy tắc cấm hardcode mã màu.
+ *
+ * Cố ý vẽ MỘT màu chứ không nhiều sắc như ảnh tham chiếu — mục 1 cấm icon nhiều
+ * màu, và ở cỡ 11px thì các mặt cắt nhiều sắc chỉ thành một vệt mờ.
  */
-.has-charcoal-background-color .gv-eyebrow,
-.gv-footer .gv-eyebrow {
-	color: var(--wp--preset--color--muted-inverse);
+.gv-eyebrow::before {
+	content: "";
+	display: inline-block;
+	width: 1.05em;
+	height: 1.05em;
+	margin-right: 0.5em;
+	vertical-align: -0.15em;
+	background-color: var(--wp--preset--color--brand);
+	-webkit-mask-image: var(--gv-gem);
+	mask-image: var(--gv-gem);
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+	-webkit-mask-position: center;
+	mask-position: center;
+	-webkit-mask-size: contain;
+	mask-size: contain;
 }
 
-/* Gạch nhấn cam ngắn — cách dùng màu thương hiệu đúng liều lượng. */
+:root {
+	--gv-gem: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linejoin='round' stroke-linecap='round'%3E%3Cpath d='M7 3h10l4 6-9 12L3 9z'/%3E%3Cpath d='M3 9h18M7 3l5 6 5-6'/%3E%3C/svg%3E");
+}
+
+/* Trên nền tối viên đá chuyển sang vàng cho đồng bộ với nhãn. */
+.has-charcoal-background-color .gv-eyebrow::before,
+.gv-footer .gv-eyebrow::before {
+	background-color: var(--wp--preset--color--gold);
+}
+
+/* Trên ảnh hero, nhãn đã dùng tông sáng thì viên đá theo cùng. */
+.gv-eyebrow--light::before {
+	background-color: var(--wp--preset--color--gold);
+}
+
+/* --- Điểm xuyết vàng kim ------------------------------------------------- */
+
+/*
+ * Vàng kim CHỈ dùng được trên nền tối. Đo thực tế: #D4AF37 đạt 8.89:1 trên nền
+ * than nhưng chỉ 2.00:1 trên nền sáng — chữ vàng trên nền sáng gần như vô hình.
+ * Vì vậy có hai sắc độ:
+ *   --gold       #D4AF37  cho nền tối (8.89:1)
+ *   --gold-deep  #A8842A  cho nền sáng (3.33:1) — chỉ dùng cho chữ LỚN và
+ *                         đường kẻ, tuyệt đối không dùng cho chữ thân bài.
+ *
+ * Cam vẫn là màu thương hiệu chính; vàng chỉ là nét điểm xuyết.
+ */
+
+/* Gạch nhấn dưới tiêu đề: chuyển từ cam sang vàng — nét ký tên của thương hiệu. */
 .gv-rule::after {
 	content: "";
 	display: block;
 	width: 56px;
 	height: 3px;
 	margin-top: var(--wp--preset--spacing--40);
-	background: var(--wp--preset--color--brand);
+	background: linear-gradient(
+		90deg,
+		var(--wp--preset--color--brand) 0%,
+		var(--wp--preset--color--gold-deep) 100%
+	);
+}
+
+/* Trên nền tối thì dùng sắc vàng sáng để giữ độ lấp lánh. */
+.has-charcoal-background-color .gv-rule::after,
+.gv-hero .gv-rule::after {
+	background: linear-gradient(
+		90deg,
+		var(--wp--preset--color--brand) 0%,
+		var(--wp--preset--color--gold) 100%
+	);
+}
+
+/*
+ * Nhãn eyebrow trên nền tối chuyển sang vàng: 8.89:1, thừa chuẩn AA.
+ * Làm theo ngữ cảnh nền thay vì gắn class ở từng pattern — quên một chỗ là
+ * tương phản tụt xuống dưới chuẩn mà mắt thường không nhận ra.
+ */
+.has-charcoal-background-color .gv-eyebrow,
+.gv-footer .gv-eyebrow {
+	color: var(--wp--preset--color--gold);
+}
+
+/*
+ * MỌI link trong section nền tối phải sáng lên. Đây là lần thứ hai lỗi này xuất
+ * hiện: lần đầu ở chân trang, lần này ở khối form (số điện thoại gần như tàng
+ * hình). Nguyên nhân gốc là elements.link trong theme.json đặt màu mực, đúng cho
+ * nền sáng nhưng sai hoàn toàn trên nền than. Sửa theo NGỮ CẢNH NỀN thay vì vá
+ * từng section, để section nền tối thêm sau này không mắc lại.
+ */
+.has-charcoal-background-color a:not(.wp-block-button__link):not(.wp-block-navigation-item__content) {
+	color: var(--wp--preset--color--base);
+	text-underline-offset: 4px;
+}
+
+.has-charcoal-background-color a:not(.wp-block-button__link):hover {
+	color: var(--wp--preset--color--gold);
+}
+
+/*
+ * Đường kẻ mảnh phía trên các section nền tối. Rất nhạt, chỉ đủ để mắt cảm
+ * nhận có một đường vàng chạy ngang — thấy rõ là thành ra loè loẹt.
+ */
+.gv-stats,
+.gv-form-section {
+	border-top: 1px solid
+		color-mix(in srgb, var(--wp--preset--color--gold) 45%, transparent);
 }
 
 .gv-rule.has-text-align-center::after {
@@ -135,7 +230,7 @@ body {
 /* Số thứ tự lớn, mờ — dùng cho danh sách dịch vụ/giá trị. */
 .gv-index {
 	display: block;
-	color: var(--wp--preset--color--muted);
+	color: var(--wp--preset--color--gold-deep);
 	font-size: var(--wp--preset--font-size--xl);
 	font-weight: 700;
 	letter-spacing: -0.02em;
@@ -259,9 +354,11 @@ body {
 	text-underline-offset: 4px;
 }
 
-/* Đường phân cách trên nền tối: dùng màu palette rồi giảm độ đậm, không đặt hex mới. */
+/* Đường phân cách chân trang: một nét vàng mảnh, giảm độ đậm cho kín đáo. */
 .gv-footer .wp-block-separator {
-	opacity: 0.3;
+	border-color: var(--wp--preset--color--gold);
+	background-color: var(--wp--preset--color--gold);
+	opacity: 0.35;
 }
 
 /* --- Nội dung bài viết --------------------------------------------------- */
@@ -409,7 +506,7 @@ body {
 .gv-process__number {
 	grid-row: 1 / span 2;
 	margin: 0;
-	color: var(--wp--preset--color--line);
+	color: var(--wp--preset--color--gold-deep);
 	font-size: var(--wp--preset--font-size--xl);
 	font-weight: 700;
 	letter-spacing: -0.02em;
