@@ -3,7 +3,7 @@ Theme Name: Golf Vegas
 Theme URI: https://golfvegas.vn
 Author: Golf Vegas
 Description: Block theme (FSE) cho website Golf Vegas — Integrated Media Solutions. Thiết kế theo hướng trang nhã, hiện đại, sang trọng. Toàn bộ design token nằm trong theme.json.
-Version: 0.5.2
+Version: 0.5.3
 Requires at least: 6.5
 Tested up to: 6.7
 Requires PHP: 8.0
@@ -225,6 +225,20 @@ main > .alignfull + .alignfull,
 		color-mix(in srgb, var(--wp--preset--color--gold) 70%, transparent);
 }
 
+/*
+ * Cùng khe 24px đó còn nằm giữa header / main / footer — đây là cấp cao hơn
+ * (.wp-site-blocks), nên rule ở trên không với tới. Hậu quả: vẫn còn vạch trắng
+ * phía trên chân trang và ngay dưới đầu trang.
+ */
+.wp-site-blocks > * {
+	margin-block-start: 0;
+}
+
+.wp-site-blocks > footer.wp-block-template-part {
+	border-top: 1px solid
+		color-mix(in srgb, var(--wp--preset--color--gold) 70%, transparent);
+}
+
 .gv-rule.has-text-align-center::after {
 	margin-inline: auto;
 }
@@ -319,8 +333,10 @@ main > .alignfull + .alignfull,
 
 /* --- Đầu trang ----------------------------------------------------------- */
 
+/* Đường dưới đầu trang cũng dùng chỉ vàng cho đồng bộ với các đường ngăn cách. */
 .gv-header {
-	border-bottom: 1px solid var(--wp--preset--color--line);
+	border-bottom: 1px solid
+		color-mix(in srgb, var(--wp--preset--color--gold) 70%, transparent);
 }
 
 .gv-logo img {
