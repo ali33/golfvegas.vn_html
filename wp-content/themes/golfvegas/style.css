@@ -3,7 +3,7 @@ Theme Name: Golf Vegas
 Theme URI: https://golfvegas.vn
 Author: Golf Vegas
 Description: Block theme (FSE) cho website Golf Vegas — Integrated Media Solutions. Thiết kế theo hướng trang nhã, hiện đại, sang trọng. Toàn bộ design token nằm trong theme.json.
-Version: 0.1.3
+Version: 0.2.0
 Requires at least: 6.5
 Tested up to: 6.7
 Requires PHP: 8.0
@@ -272,6 +272,126 @@ body {
 
 .gv-prose a {
 	text-underline-offset: 3px;
+}
+
+/* --- Form liên hệ -------------------------------------------------------- */
+
+/*
+ * Form nằm trên nền than. Ô nhập dùng kiểu gạch chân thay vì khung viền kín —
+ * nhẹ nhàng hơn và đúng tinh thần tiết chế ở mục 1 của CLAUDE.md.
+ */
+.gv-form__form {
+	display: grid;
+	gap: var(--wp--preset--spacing--40);
+}
+
+.gv-form__row {
+	display: grid;
+	gap: var(--wp--preset--spacing--20);
+	margin: 0;
+}
+
+.gv-form__label {
+	color: var(--wp--preset--color--line);
+	font-size: var(--wp--preset--font-size--body);
+	font-weight: 500;
+}
+
+.gv-form__required {
+	color: var(--wp--preset--color--brand);
+}
+
+.gv-form__input {
+	width: 100%;
+	padding: var(--wp--preset--spacing--20) 0;
+	border: 0;
+	border-bottom: 1px solid var(--wp--preset--color--muted-inverse);
+	border-radius: 0;
+	background: transparent;
+	color: var(--wp--preset--color--white);
+	font-family: inherit;
+	font-size: var(--wp--preset--font-size--body);
+	line-height: 1.7;
+	transition: border-color var(--wp--custom--transition--base);
+}
+
+.gv-form__input:focus {
+	border-bottom-color: var(--wp--preset--color--brand);
+	outline: none;
+}
+
+/* Vẫn phải có dấu hiệu cho người dùng bàn phím khi trình duyệt bật focus-visible. */
+.gv-form__input:focus-visible {
+	outline: 2px solid var(--wp--preset--color--brand);
+	outline-offset: 4px;
+}
+
+.gv-form__input::placeholder {
+	color: var(--wp--preset--color--muted-inverse);
+}
+
+.gv-form__submit {
+	width: 100%;
+	padding: var(--wp--preset--spacing--30) var(--wp--preset--spacing--50);
+	border: 0;
+	border-radius: 2px;
+	background: var(--wp--preset--color--brand);
+	color: var(--wp--preset--color--ink);
+	cursor: pointer;
+	font-family: inherit;
+	font-size: var(--wp--preset--font-size--body);
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	transition: background var(--wp--custom--transition--base);
+}
+
+.gv-form__submit:hover {
+	background: var(--wp--preset--color--white);
+}
+
+.gv-form__actions {
+	margin: var(--wp--preset--spacing--30) 0 0;
+}
+
+/* Bẫy bot: phải ẩn hoàn toàn nhưng KHÔNG dùng display:none — một số bot bỏ qua
+   trường bị display:none, khiến bẫy mất tác dụng. */
+.gv-form__trap {
+	position: absolute;
+	left: -9999px;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+}
+
+.gv-form__notice {
+	margin-bottom: var(--wp--preset--spacing--40);
+	padding: var(--wp--preset--spacing--30) var(--wp--preset--spacing--40);
+	border-left: 3px solid var(--wp--preset--color--brand);
+	background: color-mix(in srgb, var(--wp--preset--color--white) 8%, transparent);
+	font-size: var(--wp--preset--font-size--body);
+}
+
+.gv-form__notice--ok {
+	border-left-color: var(--wp--preset--color--white);
+}
+
+/* Số liệu nổi bật trong bài viết (xem bin/convert-news.py). */
+.gv-stats-inline {
+	margin-block: var(--wp--preset--spacing--50);
+	border-top: 1px solid var(--wp--preset--color--line);
+	border-bottom: 1px solid var(--wp--preset--color--line);
+}
+
+.gv-stats-inline p {
+	margin: 0;
+	line-height: 1.4;
+}
+
+.gv-stats-inline strong {
+	display: block;
+	color: var(--wp--preset--color--brand);
+	font-size: var(--wp--preset--font-size--xl);
+	letter-spacing: -0.02em;
 }
 
 /* --- Mobile -------------------------------------------------------------- */
