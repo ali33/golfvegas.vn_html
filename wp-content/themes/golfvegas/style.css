@@ -3,7 +3,7 @@ Theme Name: Golf Vegas
 Theme URI: https://golfvegas.vn
 Author: Golf Vegas
 Description: Block theme (FSE) cho website Golf Vegas — Integrated Media Solutions. Thiết kế theo hướng trang nhã, hiện đại, sang trọng. Toàn bộ design token nằm trong theme.json.
-Version: 0.5.3
+Version: 0.5.6
 Requires at least: 6.5
 Tested up to: 6.7
 Requires PHP: 8.0
@@ -342,6 +342,51 @@ main > .alignfull + .alignfull,
 .gv-logo img {
 	width: auto;
 	height: 56px;
+}
+
+/*
+ * Menu overlay trên mobile.
+ *
+ * Mặc định của WordPress không thêm lề ngang, nên các mục dính sát mép trái màn
+ * hình — đọc rất khó chịu và trông như lỗi. Đặt lề bằng đúng thang spacing của
+ * hệ thống để khớp với phần còn lại của trang.
+ */
+/*
+ * Vì sao selector phải dài như vậy: core có sẵn hai rule đặt padding cho overlay,
+ * trong đó một rule dùng `:not(.disable-default-overlay)` (độ ưu tiên 0,3,0) và
+ * file core lại nạp SAU style.css của theme. Selector ngắn hơn sẽ thua cả về
+ * độ ưu tiên lẫn thứ tự, và padding bị về 0 — chính là hiện tượng menu dính sát
+ * mép. Thêm `.gv-nav` ở đầu đưa độ ưu tiên lên 0,4,0 để chắc chắn thắng.
+ */
+.gv-nav .wp-block-navigation__responsive-container.is-menu-open:not(.disable-default-overlay) {
+	padding: var(--wp--preset--spacing--70) var(--wp--preset--spacing--50);
+}
+
+.gv-nav .wp-block-navigation__responsive-container.is-menu-open
+	.wp-block-navigation__responsive-container-content {
+	padding-top: var(--wp--preset--spacing--40);
+}
+
+/* Mỗi mục là một hàng có đường kẻ vàng mảnh, vùng chạm đủ rộng cho ngón tay. */
+.gv-nav .wp-block-navigation__responsive-container.is-menu-open
+	.wp-block-navigation-item {
+	width: 100%;
+	border-bottom: 1px solid
+		color-mix(in srgb, var(--wp--preset--color--gold) 35%, transparent);
+}
+
+.gv-nav .wp-block-navigation__responsive-container.is-menu-open
+	.wp-block-navigation-item__content {
+	display: block;
+	width: 100%;
+	padding-block: var(--wp--preset--spacing--40);
+	font-size: var(--wp--preset--font-size--lead);
+}
+
+/* Nút đóng cũng phải lùi vào cho cân với lề mới. */
+.gv-nav .wp-block-navigation__responsive-container-close {
+	top: var(--wp--preset--spacing--50);
+	right: var(--wp--preset--spacing--50);
 }
 
 /* Điều hướng: gạch chân cam chạy ra khi hover, thay vì đổi màu nền. */
