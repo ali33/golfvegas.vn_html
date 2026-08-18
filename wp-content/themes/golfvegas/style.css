@@ -3,7 +3,7 @@ Theme Name: Golf Vegas
 Theme URI: https://golfvegas.vn
 Author: Golf Vegas
 Description: Block theme (FSE) cho website Golf Vegas — Integrated Media Solutions. Thiết kế theo hướng trang nhã, hiện đại, sang trọng. Toàn bộ design token nằm trong theme.json.
-Version: 0.2.0
+Version: 0.3.1
 Requires at least: 6.5
 Tested up to: 6.7
 Requires PHP: 8.0
@@ -373,6 +373,69 @@ body {
 
 .gv-form__notice--ok {
 	border-left-color: var(--wp--preset--color--white);
+}
+
+/* --- Năng lực & quy trình ------------------------------------------------ */
+
+.gv-capability__value {
+	margin: 0;
+	color: var(--wp--preset--color--brand);
+	font-size: var(--wp--preset--font-size--xl);
+	font-weight: 700;
+	letter-spacing: -0.02em;
+	line-height: 1.1;
+}
+
+/* Quy trình: số thứ tự nằm cột trái, nội dung cột phải — kiểu danh sách biên tập. */
+.gv-process__step {
+	display: grid;
+	grid-template-columns: 4rem 1fr;
+	gap: var(--wp--preset--spacing--50);
+	align-items: start;
+}
+
+@media (max-width: 600px) {
+	.gv-process__step {
+		grid-template-columns: 1fr;
+		gap: var(--wp--preset--spacing--20);
+	}
+}
+
+/*
+ * Số thứ tự chiếm trọn hai hàng của cột trái, để tiêu đề và mô tả xếp chồng
+ * trong cột phải. Cách này tránh phải bọc thêm thẻ div thô vào giữa block —
+ * thứ làm hỏng cấu trúc block của WordPress.
+ */
+.gv-process__number {
+	grid-row: 1 / span 2;
+	margin: 0;
+	color: var(--wp--preset--color--line);
+	font-size: var(--wp--preset--font-size--xl);
+	font-weight: 700;
+	letter-spacing: -0.02em;
+	line-height: 1.2;
+}
+
+.gv-process__title,
+.gv-process__text {
+	grid-column: 2;
+	margin: 0;
+}
+
+@media (max-width: 600px) {
+	.gv-process__number {
+		grid-row: auto;
+	}
+
+	.gv-process__title,
+	.gv-process__text {
+		grid-column: 1;
+	}
+}
+
+/* Bước cuối không cần đường kẻ dưới vì section đã có nền riêng. */
+.gv-process__step:last-child {
+	padding-bottom: 0;
 }
 
 /* Số liệu nổi bật trong bài viết (xem bin/convert-news.py). */
