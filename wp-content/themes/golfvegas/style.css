@@ -1,0 +1,383 @@
+/*
+Theme Name: Golf Vegas
+Theme URI: https://golfvegas.vn
+Author: Golf Vegas
+Description: Block theme (FSE) cho website Golf Vegas — Integrated Media Solutions. Thiết kế theo hướng trang nhã, hiện đại, sang trọng. Toàn bộ design token nằm trong theme.json.
+Version: 0.1.3
+Requires at least: 6.5
+Tested up to: 6.7
+Requires PHP: 8.0
+License: GPL-2.0-or-later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: golfvegas
+Tags: block-patterns, full-site-editing, translation-ready
+*/
+
+/*
+ * QUY TẮC: không hardcode mã màu ở đây. Mọi màu/spacing/font lấy từ theme.json
+ * qua biến var(--wp--preset--*). File này chỉ chứa những gì theme.json không
+ * diễn đạt được (pseudo-element, trạng thái focus, tiện ích nhỏ).
+ */
+
+/* --- Nền tảng ------------------------------------------------------------ */
+
+html {
+	scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
+
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+}
+
+body {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
+}
+
+/* Giới hạn độ dài dòng văn bản dài — dấu tiếng Việt cần dòng ngắn để dễ đọc. */
+.gv-measure {
+	max-width: var(--wp--custom--measure);
+}
+
+/* --- Tiêu điểm bàn phím (a11y) ------------------------------------------- */
+
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+	outline: 2px solid var(--wp--preset--color--brand);
+	outline-offset: 3px;
+}
+
+.skip-link:not(:focus) {
+	position: absolute !important;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(1px, 1px, 1px, 1px);
+	white-space: nowrap;
+}
+
+.skip-link:focus {
+	position: absolute;
+	z-index: 100000;
+	top: var(--wp--preset--spacing--30);
+	left: var(--wp--preset--spacing--30);
+	padding: var(--wp--preset--spacing--30) var(--wp--preset--spacing--40);
+	background: var(--wp--preset--color--ink);
+	color: var(--wp--preset--color--white);
+	text-decoration: none;
+}
+
+/* --- Eyebrow: nhãn nhỏ viết hoa trên tiêu đề ----------------------------- */
+
+.gv-eyebrow {
+	display: block;
+	margin-bottom: var(--wp--preset--spacing--30);
+	color: var(--wp--preset--color--muted);
+	font-size: var(--wp--preset--font-size--eyebrow);
+	font-weight: 600;
+	letter-spacing: 0.12em;
+	line-height: 1.4;
+	text-transform: uppercase;
+}
+
+/* Eyebrow trên nền ảnh: cần sáng hơn nữa vì nền ảnh không đồng đều. */
+.gv-eyebrow--light {
+	color: var(--wp--preset--color--line);
+}
+
+/*
+ * Eyebrow nằm trong section nền tối tự đổi sang tông sáng.
+ * Làm theo ngữ cảnh thay vì gắn class thủ công ở từng pattern — chỉ cần quên
+ * một chỗ là tương phản tụt xuống 3.48:1 và trượt WCAG, mà nhìn mắt thường
+ * gần như không nhận ra.
+ */
+.has-charcoal-background-color .gv-eyebrow,
+.gv-footer .gv-eyebrow {
+	color: var(--wp--preset--color--muted-inverse);
+}
+
+/* Gạch nhấn cam ngắn — cách dùng màu thương hiệu đúng liều lượng. */
+.gv-rule::after {
+	content: "";
+	display: block;
+	width: 56px;
+	height: 3px;
+	margin-top: var(--wp--preset--spacing--40);
+	background: var(--wp--preset--color--brand);
+}
+
+.gv-rule.has-text-align-center::after {
+	margin-inline: auto;
+}
+
+/* --- Thẻ nội dung: hairline thay cho bóng đổ ----------------------------- */
+
+.gv-card {
+	height: 100%;
+	border: 1px solid var(--wp--preset--color--line);
+	transition: border-color var(--wp--custom--transition--base);
+}
+
+.gv-card:hover {
+	border-color: var(--wp--preset--color--ink);
+}
+
+/* Số thứ tự lớn, mờ — dùng cho danh sách dịch vụ/giá trị. */
+.gv-index {
+	display: block;
+	color: var(--wp--preset--color--muted);
+	font-size: var(--wp--preset--font-size--xl);
+	font-weight: 700;
+	letter-spacing: -0.02em;
+	line-height: 1;
+}
+
+/* --- Hero ---------------------------------------------------------------- */
+
+/*
+ * Ảnh DOOH ban đêm đã tối sẵn nhưng độ sáng không đều (đèn LED rất chói).
+ * Thêm lớp chuyển màu từ dưới lên để chân chữ luôn nằm trên vùng tối, thay vì
+ * tăng dimRatio làm mất chi tiết ảnh.
+ */
+.gv-hero .wp-block-cover__background {
+	background-image:
+		linear-gradient(
+			to right,
+			var(--wp--preset--color--charcoal) 0%,
+			color-mix(in srgb, var(--wp--preset--color--charcoal) 92%, transparent) 30%,
+			color-mix(in srgb, var(--wp--preset--color--charcoal) 62%, transparent) 55%,
+			color-mix(in srgb, var(--wp--preset--color--charcoal) 20%, transparent) 85%,
+			transparent 100%
+		),
+		linear-gradient(
+			to top,
+			var(--wp--preset--color--charcoal) 0%,
+			color-mix(in srgb, var(--wp--preset--color--charcoal) 20%, transparent) 45%,
+			color-mix(in srgb, var(--wp--preset--color--charcoal) 45%, transparent) 100%
+		);
+}
+
+/* Ảnh nền hero: dịch tiêu điểm sang phải để phần LED sáng không nằm dưới chữ. */
+.gv-hero .wp-block-cover__image-background {
+	object-position: 82% center;
+}
+
+.gv-hero .wp-block-cover__inner-container {
+	width: 100%;
+}
+
+/* --- Ảnh ----------------------------------------------------------------- */
+
+.gv-figure img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+/* Ảnh dịch vụ: phóng rất nhẹ khi rê chuột. Tiết chế, không giật. */
+.gv-service .gv-figure {
+	overflow: hidden;
+}
+
+.gv-service .gv-figure img {
+	transform: scale(1);
+	transition: transform var(--wp--custom--transition--slow);
+}
+
+.gv-service:hover .gv-figure img {
+	transform: scale(1.04);
+}
+
+/* Lớp phủ tối để chữ đè trên ảnh đạt tương phản. */
+.gv-overlay::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: var(--wp--custom--overlay--image);
+	pointer-events: none;
+}
+
+/* --- Đầu trang ----------------------------------------------------------- */
+
+.gv-header {
+	border-bottom: 1px solid var(--wp--preset--color--line);
+}
+
+.gv-logo img {
+	width: auto;
+	height: 56px;
+}
+
+/* Điều hướng: gạch chân cam chạy ra khi hover, thay vì đổi màu nền. */
+.gv-nav a {
+	position: relative;
+	text-decoration: none;
+}
+
+.gv-nav a::after {
+	content: "";
+	position: absolute;
+	bottom: -6px;
+	left: 0;
+	width: 0;
+	height: 2px;
+	background: var(--wp--preset--color--brand);
+	transition: width var(--wp--custom--transition--base);
+}
+
+.gv-nav a:hover::after,
+.gv-nav .current-menu-item > a::after {
+	width: 100%;
+}
+
+/* --- Chân trang ---------------------------------------------------------- */
+
+/*
+ * Link trên nền tối phải được ép màu sáng. Không có quy tắc này, chúng thừa
+ * hưởng màu mực từ elements.link trong theme.json và gần như tàng hình trên
+ * nền than — lỗi tương phản thật, không phải chuyện thẩm mỹ.
+ */
+.gv-footer a {
+	color: var(--wp--preset--color--base);
+	text-decoration: none;
+}
+
+.gv-footer a:hover {
+	color: var(--wp--preset--color--brand);
+	text-decoration: underline;
+	text-underline-offset: 4px;
+}
+
+/* Đường phân cách trên nền tối: dùng màu palette rồi giảm độ đậm, không đặt hex mới. */
+.gv-footer .wp-block-separator {
+	opacity: 0.3;
+}
+
+/* --- Nội dung bài viết --------------------------------------------------- */
+
+.gv-prose :where(p, ul, ol) {
+	max-width: var(--wp--custom--measure);
+}
+
+.gv-prose a {
+	text-underline-offset: 3px;
+}
+
+/* --- Mobile -------------------------------------------------------------- */
+
+/*
+ * Ngưỡng 781px là breakpoint mà WordPress dùng để xếp chồng cột (core/columns),
+ * nên bám theo nó để bố cục không lệch pha với block lõi.
+ *
+ * Cách làm: ghi đè trực tiếp biến preset spacing thay vì sửa từng pattern.
+ * Nhờ vậy mọi section co lại đồng loạt, và pattern vẫn chỉ dùng thang spacing
+ * chuẩn — không phát sinh giá trị lẻ nằm ngoài hệ thống.
+ */
+@media (max-width: 781px) {
+	:root {
+		--wp--preset--spacing--70: 40px;
+		--wp--preset--spacing--80: 56px;
+		--wp--preset--spacing--90: 72px;
+	}
+
+	/*
+	 * svh = chiều cao khả kiến thật, đã trừ thanh địa chỉ trình duyệt di động.
+	 * Dùng vh sẽ khiến nút CTA bị đẩy xuống dưới mép màn hình.
+	 */
+	.gv-hero {
+		min-height: 76vh;
+		min-height: 76svh;
+	}
+
+	/* Trên nền hẹp, chuyển màu ngang không còn tác dụng — phủ tối đều toàn khung. */
+	.gv-hero .wp-block-cover__background {
+		background-image: linear-gradient(
+			to top,
+			var(--wp--preset--color--charcoal) 0%,
+			color-mix(in srgb, var(--wp--preset--color--charcoal) 55%, transparent) 60%,
+			color-mix(in srgb, var(--wp--preset--color--charcoal) 65%, transparent) 100%
+		);
+	}
+
+	/* Hai nút cạnh nhau quá chật ở 414px — xếp chồng, mỗi nút chiếm trọn bề ngang. */
+	.gv-hero .wp-block-buttons,
+	.gv-cta .wp-block-buttons {
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+		gap: var(--wp--preset--spacing--30);
+		width: 100%;
+	}
+
+	.gv-hero .wp-block-button,
+	.gv-cta .wp-block-button {
+		width: 100%;
+	}
+
+	.gv-hero .wp-block-button__link,
+	.gv-cta .wp-block-button__link {
+		display: block;
+		width: 100%;
+		text-align: center;
+	}
+
+	.gv-logo img {
+		height: 40px;
+	}
+
+	/*
+	 * Nút "Liên hệ" trên header chiếm chỗ của nút mở menu. Mục Liên hệ đã có
+	 * trong menu overlay (xem bin/setup-content.php) nên ẩn nút đi là an toàn.
+	 */
+	.gv-header .wp-block-buttons {
+		display: none;
+	}
+
+	/* Dấu tiếng Việt cần thêm chỗ thở khi cỡ chữ lớn thu nhỏ lại. */
+	.gv-hero h1 {
+		line-height: 1.2;
+	}
+}
+
+/* --- Placeholder nội dung còn thiếu -------------------------------------- */
+
+/*
+ * Ghi chú dành cho người quản trị về nội dung còn thiếu.
+ * WordPress gắn class `logged-in` vào body, nên khách truy cập không thấy ô này —
+ * họ thấy `.gv-empty` bên dưới thay thế.
+ */
+.gv-todo {
+	padding: var(--wp--preset--spacing--40);
+	border: 1px dashed var(--wp--preset--color--brand);
+	color: var(--wp--preset--color--muted);
+	font-size: var(--wp--preset--font-size--caption);
+}
+
+body:not(.logged-in) .gv-todo {
+	display: none;
+}
+
+/*
+ * Trạng thái rỗng hiển thị cho khách: phải trông có chủ đích, không phải lỗi.
+ * Ngược lại, người quản trị thấy `.gv-todo` nên không cần thấy dòng này.
+ */
+.gv-empty {
+	padding: var(--wp--preset--spacing--70) 0;
+	border-top: 1px solid var(--wp--preset--color--line);
+	color: var(--wp--preset--color--muted);
+}
+
+body.logged-in .gv-empty {
+	display: none;
+}

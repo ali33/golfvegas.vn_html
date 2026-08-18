@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ali33.github.io/golfvegas.vn_html/sitemap.xml
